@@ -1,3 +1,6 @@
 ds-test/=lib/forge-std/lib/ds-test/src/
 forge-std/=lib/forge-std/src/
 foundry-devops/=lib/foundry-devops/
+nft-contracts/=lib/nft-contracts/src/
+@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/
+twap/=lib/twap/src/

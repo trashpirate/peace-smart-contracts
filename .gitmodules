@@ -4,3 +4,12 @@
 [submodule "lib/foundry-devops"]
 	path = lib/foundry-devops
 	url = https://github.com/Cyfrin/foundry-devops
+[submodule "lib/openzeppelin-contracts"]
+	path = lib/openzeppelin-contracts
+	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+[submodule "lib/twap"]
+	path = lib/twap
+	url = https://github.com/trashpirate/twap
+[submodule "lib/nft-contracts"]
+	path = lib/nft-contracts
+	url = https://github.com/trashpirate/nft-contracts
