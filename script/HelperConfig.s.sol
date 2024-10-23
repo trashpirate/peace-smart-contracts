@@ -25,9 +25,12 @@ contract HelperConfig is Script {
     string public SYMBOL = "PEACE";
     string public BASE_URI = "ipfs://bafybeidunoa4h3e5kvddib6gi53nhmbm32lzvcaxqccdforsiih2mwubky/";
     string public CONTRACT_URI = "ipfs://bafkreiez4tklbxcv5e45s5zed5l2x2atmf7d26lfuo42xbbddnlppnzngm";
-    uint256 public MAX_SUPPLY = 20000;
+    uint256 public MAX_SUPPLY = 1000;
     uint256 public ETH_FEE = 0.000777 ether;
-    uint256 public TOKEN_FEE = 0;
+    uint256 public TOKEN_FEE = 100;
+    uint256 public MAX_WALLET_SIZE = 3;
+    uint256 public BATCH_LIMIT = 3;
+    uint96 public ROYALTY_NUMERATOR = 500; // 5%
 
     bytes32 public MERKLE_ROOT = 0x7cfda1d6c2b32e261fbdf50526b103173ab06cb1879095dddc3d2c5feb96198a;
 
@@ -58,9 +61,9 @@ contract HelperConfig is Script {
                     contractURI: CONTRACT_URI,
                     owner: vm.envAddress("OWNER_ADDRESS"),
                     maxSupply: MAX_SUPPLY,
-                    maxWalletSize: 10,
-                    batchLimit: 10,
-                    royaltyNumerator: 500 // 5%
+                    maxWalletSize: MAX_WALLET_SIZE,
+                    batchLimit: BATCH_LIMIT,
+                    royaltyNumerator: ROYALTY_NUMERATOR // 5%
                 }),
                 feeAddress: vm.envAddress("FEE_ADDRESS"),
                 tokenAddress: vm.envAddress("TOKEN_ADDRESS"),
@@ -81,9 +84,9 @@ contract HelperConfig is Script {
                     contractURI: CONTRACT_URI,
                     owner: vm.envAddress("OWNER_ADDRESS"),
                     maxSupply: MAX_SUPPLY,
-                    maxWalletSize: 10,
-                    batchLimit: 10,
-                    royaltyNumerator: 500 // 5%
+                    maxWalletSize: MAX_WALLET_SIZE,
+                    batchLimit: BATCH_LIMIT,
+                    royaltyNumerator: ROYALTY_NUMERATOR // 5%
                 }),
                 feeAddress: vm.envAddress("FEE_ADDRESS"),
                 tokenAddress: vm.envAddress("TOKEN_ADDRESS"),
@@ -109,15 +112,15 @@ contract HelperConfig is Script {
                     contractURI: CONTRACT_URI,
                     owner: vm.envAddress("ANVIL_DEFAULT_ACCOUNT"),
                     maxSupply: MAX_SUPPLY,
-                    maxWalletSize: 10,
-                    batchLimit: 10,
-                    royaltyNumerator: 500 // 5%
+                    maxWalletSize: MAX_WALLET_SIZE,
+                    batchLimit: BATCH_LIMIT,
+                    royaltyNumerator: ROYALTY_NUMERATOR // 5%
                 }),
                 feeAddress: vm.envAddress("ANVIL_DEFAULT_ACCOUNT"),
                 tokenAddress: address(token),
                 ethFee: ETH_FEE,
                 tokenFee: TOKEN_FEE,
-                merkleRoot: MERKLE_ROOT
+                merkleRoot: 0x7cfda1d6c2b32e261fbdf50526b103173ab06cb1879095dddc3d2c5feb96198a
             })
         });
     }

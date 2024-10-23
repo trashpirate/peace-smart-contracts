@@ -22,6 +22,11 @@ contract WorldPeace is ERC721ACore, FeeHandler, Pausable, Whitelist {
     address private immutable i_poolAddress;
 
     /*//////////////////////////////////////////////////////////////
+                                 ERRORS
+    //////////////////////////////////////////////////////////////*/
+    error WorldPeace__URIQueryForNonexistentToken(uint256 tokenId);
+
+    /*//////////////////////////////////////////////////////////////
                                FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
@@ -52,24 +57,33 @@ contract WorldPeace is ERC721ACore, FeeHandler, Pausable, Whitelist {
     /// @param quantity number of NFTs to mint
     function mint(uint256 quantity, bytes32[] calldata merkleProof)
         external
-        payable
         whenNotPaused
-        validQuantity(quantity)
         onlyNotClaimed(msg.sender)
+        validQuantity(quantity)
     {
-        uint256 fee = getEthFee() * (PRECISION * PRECISION) / i_oracle.calcTwapInEth(i_poolAddress, SECONDS_AGO);
+        //  getEthFee() * (PRECISION * PRECISION) / i_oracle.calcTwapInEth(i_poolAddress, SECONDS_AGO);
+
         if (_verifyClaimer(msg.sender, merkleProof)) {
             _setClaimStatus(msg.sender, true);
             _safeMint(msg.sender, quantity);
 
-            uint256 totalFee = (quantity - 1) * fee;
+            uint256 totalFee = (quantity - 1) * getTokenFee();
             _chargeTokenFee(totalFee);
         } else {
             _safeMint(msg.sender, quantity);
 
-            uint256 totalFee = quantity * fee;
+            uint256 totalFee = quantity * getTokenFee();
             _chargeTokenFee(totalFee);
         }
+    }
+
+    /// @notice retrieves tokenURI
+    /// @dev override required by ERC721A
+    function tokenURI(uint256 tokenId) public view virtual override(ERC721ACore) returns (string memory) {
+        if (!_exists(tokenId)) {
+            revert WorldPeace__URIQueryForNonexistentToken(tokenId);
+        }
+        return _baseURI();
     }
 
     /// @notice Pauses contract (only owner)
@@ -94,7 +108,7 @@ contract WorldPeace is ERC721ACore, FeeHandler, Pausable, Whitelist {
         _setFeeAddress(feeAddress);
     }
 
-    /// @notice Sets the merkle root
+    /// @notice Sets the merkle root for the whitelist (only owner)
     /// @param merkleRoot New merkle root
     function setMerkleRoot(bytes32 merkleRoot) external onlyOwner {
         _setMerkleRoot(merkleRoot);
